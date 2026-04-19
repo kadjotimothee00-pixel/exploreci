@@ -342,7 +342,7 @@ class CategoriesPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(10)),
-              child: const Text("Bientôt 🚧", style: TextStyle(fontSize: 10, color: Colors.grey)),
+              child: const Text("Bientôt", style: TextStyle(fontSize: 10, color: Colors.grey)),
             ),
           ],
         ),

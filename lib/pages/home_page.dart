@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: sitesFiltres.isEmpty
                   ? const Center(
-                      child: Text("Aucun site trouvé 😕",
+                      child: Text("Aucun site trouvé ",
                           style: TextStyle(fontSize: 16, color: Colors.grey)),
                     )
                   : ListView.builder(
