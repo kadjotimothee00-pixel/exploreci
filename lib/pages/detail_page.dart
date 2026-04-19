@@ -364,7 +364,7 @@ class _DetailPageState extends State<DetailPage> {
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade800,
+                        backgroundColor: const Color.fromARGB(255, 255, 132, 0),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

@@ -25,15 +25,6 @@ class LandingPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                   const Text(
-                    "ExploreCI",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 48, 158, 52),
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
                     "Découvrez les merveilles\nde la Côte d'Ivoire",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.green, fontSize: 16),
