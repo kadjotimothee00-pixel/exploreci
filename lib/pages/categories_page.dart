@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
 
-  // Sites de l'application
   static const List<Map<String, dynamic>> tousLesSites = [
     {
       "nom": "Basilique Notre-Dame de la Paix",
@@ -61,7 +61,7 @@ class CategoriesPage extends StatelessWidget {
       "couleur": Colors.orange,
       "image": "https://res.cloudinary.com/yafohi-travel/image/upload/f_auto/images/districts-places/mosq-bf72epfq27.jpg",
     },
-     {
+    {
       "nom": "Pont de Lianes de Man",
       "ville": "Man",
       "categorie": "Nature",
@@ -121,6 +121,92 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // ✅ Mode visiteur
+    if (user == null) {
+      return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.green.shade800,
+          unselectedItemColor: Colors.grey,
+          currentIndex: 1,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+            BottomNavigationBarItem(icon: Icon(Icons.category), label: "Catégories"),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favoris"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ],
+          onTap: (index) {
+            if (index == 0) Navigator.pushNamed(context, '/home');
+            if (index == 2) Navigator.pushNamed(context, '/favoris');
+            if (index == 3) Navigator.pushNamed(context, '/profil');
+          },
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.grey.shade200,
+                  child: Icon(Icons.category_outlined,
+                      size: 50, color: Colors.grey.shade400),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Accès aux catégories",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Connectez-vous pour explorer les catégories de sites touristiques.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/connexion'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade800,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      "Se connecter",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/inscription'),
+                  child: const Text(
+                    "Créer un compte",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // ✅ Utilisateur connecté
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: BottomNavigationBar(
@@ -142,7 +228,6 @@ class CategoriesPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // En-tête
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -156,25 +241,18 @@ class CategoriesPage extends StatelessWidget {
                 ),
               ),
             ),
-
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🟢 Section Sites
-                    const Text(
-                      "Sites touristiques",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
-                      ),
-                    ),
+                    const Text("Sites touristiques",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54)),
                     const SizedBox(height: 12),
-
-                    // Grille sites
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -183,76 +261,21 @@ class CategoriesPage extends StatelessWidget {
                       mainAxisSpacing: 12,
                       childAspectRatio: 1.3,
                       children: [
-                        // Bouton Villes
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.location_city,
-                          nom: "Villes",
-                          couleur: Colors.indigo,
-                          onTap: () => _afficherVilles(context),
-                        ),
-                        // Bouton Monument
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.church,
-                          nom: "Monuments",
-                          couleur: Colors.orange,
-                          onTap: () => _afficherSitesParCategorie(
-                              context, "Monument"),
-                        ),
-                        // Bouton Nature
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.forest,
-                          nom: "Nature",
-                          couleur: Colors.green,
-                          onTap: () => _afficherSitesParCategorie(
-                              context, "Nature"),
-                        ),
-                        // Bouton Plage
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.beach_access,
-                          nom: "Plages",
-                          couleur: Colors.blue,
-                          onTap: () => _afficherSitesParCategorie(
-                              context, "Plage"),
-                        ),
-                        // Bouton Culture
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.store,
-                          nom: "Culture",
-                          couleur: Colors.purple,
-                          onTap: () => _afficherSitesParCategorie(
-                              context, "Culture"),
-                        ),
-                        // Bouton Divertissement
-                        _buildBoutonSite(
-                          context,
-                          icone: Icons.attractions,
-                          nom: "Divertissement",
-                          couleur: Colors.teal,
-                          onTap: () => _afficherSitesParCategorie(
-                              context, "Divertissement"),
-                        ),
+                        _buildBoutonSite(context, icone: Icons.location_city, nom: "Villes", couleur: Colors.indigo, onTap: () => _afficherVilles(context)),
+                        _buildBoutonSite(context, icone: Icons.church, nom: "Monuments", couleur: Colors.orange, onTap: () => _afficherSitesParCategorie(context, "Monument")),
+                        _buildBoutonSite(context, icone: Icons.forest, nom: "Nature", couleur: Colors.green, onTap: () => _afficherSitesParCategorie(context, "Nature")),
+                        _buildBoutonSite(context, icone: Icons.beach_access, nom: "Plages", couleur: Colors.blue, onTap: () => _afficherSitesParCategorie(context, "Plage")),
+                        _buildBoutonSite(context, icone: Icons.store, nom: "Culture", couleur: Colors.purple, onTap: () => _afficherSitesParCategorie(context, "Culture")),
+                        _buildBoutonSite(context, icone: Icons.attractions, nom: "Divertissement", couleur: Colors.teal, onTap: () => _afficherSitesParCategorie(context, "Divertissement")),
                       ],
                     ),
-
                     const SizedBox(height: 24),
-
-                    // 🟢 Section Services
-                    const Text(
-                      "Services",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
-                      ),
-                    ),
+                    const Text("Services",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54)),
                     const SizedBox(height: 12),
-
-                    // Grille services
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -261,38 +284,11 @@ class CategoriesPage extends StatelessWidget {
                       mainAxisSpacing: 12,
                       childAspectRatio: 1.3,
                       children: [
-                        _buildBoutonService(
-                          icone: Icons.hotel,
-                          nom: "Hôtels",
-                          couleur: Colors.amber,
-                          onTap: () => _afficherBientot(context, "Hôtels"),
-                        ),
-                        _buildBoutonService(
-                          icone: Icons.local_hospital,
-                          nom: "Hôpitaux",
-                          couleur: Colors.red,
-                          onTap: () => _afficherBientot(context, "Hôpitaux"),
-                        ),
-                        _buildBoutonService(
-                          icone: Icons.local_pharmacy,
-                          nom: "Pharmacies",
-                          couleur: Colors.cyan,
-                          onTap: () =>
-                              _afficherBientot(context, "Pharmacies"),
-                        ),
-                        _buildBoutonService(
-                          icone: Icons.restaurant,
-                          nom: "Restaurants",
-                          couleur: Colors.deepOrange,
-                          onTap: () =>
-                              _afficherBientot(context, "Restaurants"),
-                        ),
-                        _buildBoutonService(
-                          icone: Icons.event,
-                          nom: "Événements",
-                          couleur: Colors.pink,
-                          onTap: () => _afficherBientot(context, "Événements"),
-                        ),
+                        _buildBoutonService(icone: Icons.hotel, nom: "Hôtels", couleur: Colors.amber, onTap: () => _afficherBientot(context, "Hôtels")),
+                        _buildBoutonService(icone: Icons.local_hospital, nom: "Hôpitaux", couleur: Colors.red, onTap: () => _afficherBientot(context, "Hôpitaux")),
+                        _buildBoutonService(icone: Icons.local_pharmacy, nom: "Pharmacies", couleur: Colors.cyan, onTap: () => _afficherBientot(context, "Pharmacies")),
+                        _buildBoutonService(icone: Icons.restaurant, nom: "Restaurants", couleur: Colors.deepOrange, onTap: () => _afficherBientot(context, "Restaurants")),
+                        _buildBoutonService(icone: Icons.event, nom: "Événements", couleur: Colors.pink, onTap: () => _afficherBientot(context, "Événements")),
                       ],
                     ),
                   ],
@@ -305,61 +301,28 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  // Bouton site touristique
-  Widget _buildBoutonSite(
-    BuildContext context, {
-    required IconData icone,
-    required String nom,
-    required Color couleur,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildBoutonSite(BuildContext context, {required IconData icone, required String nom, required Color couleur, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            colors: [
-              couleur.withOpacity(0.8),
-              couleur.withOpacity(0.5),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: couleur.withOpacity(0.3),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          gradient: LinearGradient(colors: [couleur.withOpacity(0.8), couleur.withOpacity(0.5)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: [BoxShadow(color: couleur.withOpacity(0.3), blurRadius: 6, offset: const Offset(0, 3))],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icone, color: Colors.white, size: 40),
             const SizedBox(height: 8),
-            Text(
-              nom,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(nom, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
     );
   }
 
-  // Bouton service (bientôt)
-  Widget _buildBoutonService({
-    required IconData icone,
-    required String nom,
-    required Color couleur,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildBoutonService({required IconData icone, required String nom, required Color couleur, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -367,38 +330,19 @@ class CategoriesPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: Colors.white,
           border: Border.all(color: couleur.withOpacity(0.4)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 3))],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icone, color: couleur, size: 40),
             const SizedBox(height: 8),
-            Text(
-              nom,
-              style: TextStyle(
-                color: couleur,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(nom, style: TextStyle(color: couleur, fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                "Bientôt ",
-                style: TextStyle(fontSize: 10, color: Colors.grey),
-              ),
+              decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(10)),
+              child: const Text("Bientôt 🚧", style: TextStyle(fontSize: 10, color: Colors.grey)),
             ),
           ],
         ),
@@ -406,100 +350,57 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  // Afficher les villes
- void _afficherVilles(BuildContext context) {
-  List<String> villes = tousLesSites
-      .map((s) => s["ville"] as String)
-      .toSet()
-      .toList();
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true, 
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      maxChildSize: 0.9,
-      minChildSize: 0.4,
-      expand: false,
-      builder: (context, scrollController) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Choisir une ville",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
-                controller: scrollController,
-                children: villes.map((ville) {
-                  int nbSites = tousLesSites
-                      .where((s) => s["ville"] == ville)
-                      .length;
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.green.shade100,
-                      child: Icon(Icons.location_city,
-                          color: Colors.green.shade800),
-                    ),
-                    title: Text(
-                      ville,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text("$nbSites site(s)"),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _afficherSitesParVille(context, ville);
-                    },
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-  // Afficher les sites par ville
-  void _afficherSitesParVille(BuildContext context, String ville) {
-    List<Map<String, dynamic>> sites = tousLesSites
-        .where((s) => s["ville"] == ville)
-        .toList();
-
+  void _afficherVilles(BuildContext context) {
+    List<String> villes = tousLesSites.map((s) => s["ville"] as String).toSet().toList();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        maxChildSize: 0.9,
-        minChildSize: 0.4,
-        expand: false,
+        initialChildSize: 0.6, maxChildSize: 0.9, minChildSize: 0.4, expand: false,
         builder: (context, scrollController) => Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Sites à $ville",
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              const Text("Choisir une ville", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  children: villes.map((ville) {
+                    int nbSites = tousLesSites.where((s) => s["ville"] == ville).length;
+                    return ListTile(
+                      leading: CircleAvatar(backgroundColor: Colors.green.shade100, child: Icon(Icons.location_city, color: Colors.green.shade800)),
+                      title: Text(ville, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text("$nbSites site(s)"),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () { Navigator.pop(context); _afficherSitesParVille(context, ville); },
+                    );
+                  }).toList(),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _afficherSitesParVille(BuildContext context, String ville) {
+    List<Map<String, dynamic>> sites = tousLesSites.where((s) => s["ville"] == ville).toList();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6, maxChildSize: 0.9, minChildSize: 0.4, expand: false,
+        builder: (context, scrollController) => Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Sites à $ville", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
@@ -508,30 +409,11 @@ class CategoriesPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final site = sites[index];
                     return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            (site["couleur"] as Color).withOpacity(0.2),
-                        child: Icon(Icons.location_on,
-                            color: site["couleur"]),
-                      ),
-                      title: Text(
-                        site["nom"],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      leading: CircleAvatar(backgroundColor: (site["couleur"] as Color).withOpacity(0.2), child: Icon(Icons.location_on, color: site["couleur"])),
+                      title: Text(site["nom"], style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(site["categorie"]),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.star,
-                              size: 14, color: Colors.amber),
-                          Text(" ${site["note"]}"),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, '/detail',
-                            arguments: site);
-                      },
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.star, size: 14, color: Colors.amber), Text(" ${site["note"]}")]),
+                      onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/detail', arguments: site); },
                     );
                   },
                 ),
@@ -543,35 +425,20 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  // Afficher les sites par catégorie
   void _afficherSitesParCategorie(BuildContext context, String categorie) {
-    List<Map<String, dynamic>> sites = tousLesSites
-        .where((s) => s["categorie"] == categorie)
-        .toList();
-
+    List<Map<String, dynamic>> sites = tousLesSites.where((s) => s["categorie"] == categorie).toList();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        maxChildSize: 0.9,
-        minChildSize: 0.4,
-        expand: false,
+        initialChildSize: 0.6, maxChildSize: 0.9, minChildSize: 0.4, expand: false,
         builder: (context, scrollController) => Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                categorie,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text(categorie, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               Expanded(
                 child: sites.isEmpty
@@ -582,31 +449,11 @@ class CategoriesPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final site = sites[index];
                           return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  (site["couleur"] as Color).withOpacity(0.2),
-                              child: Icon(Icons.location_on,
-                                  color: site["couleur"]),
-                            ),
-                            title: Text(
-                              site["nom"],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            leading: CircleAvatar(backgroundColor: (site["couleur"] as Color).withOpacity(0.2), child: Icon(Icons.location_on, color: site["couleur"])),
+                            title: Text(site["nom"], style: const TextStyle(fontWeight: FontWeight.bold)),
                             subtitle: Text(site["ville"]),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.star,
-                                    size: 14, color: Colors.amber),
-                                Text(" ${site["note"]}"),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/detail',
-                                  arguments: site);
-                            },
+                            trailing: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.star, size: 14, color: Colors.amber), Text(" ${site["note"]}")]),
+                            onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/detail', arguments: site); },
                           );
                         },
                       ),
@@ -618,13 +465,10 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  // Afficher bientôt disponible
   void _afficherBientot(BuildContext context, String service) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -632,33 +476,14 @@ class CategoriesPage extends StatelessWidget {
           children: [
             const Text("‼️", style: TextStyle(fontSize: 50)),
             const SizedBox(height: 16),
-            Text(
-              "$service - Bientôt disponible !",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            Text("$service - Bientôt disponible !", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
             const SizedBox(height: 8),
-            Text(
-              "Cette fonctionnalité sera disponible dans une prochaine mise à jour.",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
+            Text("Cette fonctionnalité sera disponible dans une prochaine mise à jour.", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade600)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green.shade800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "OK",
-                style: TextStyle(color: Colors.white),
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade800, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              child: const Text("OK", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

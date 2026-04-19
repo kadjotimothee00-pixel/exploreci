@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 
 class CartePage extends StatefulWidget {
@@ -110,6 +111,22 @@ class _CartePageState extends State<CartePage> {
   void initState() {
     super.initState();
     _obtenirPosition();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args != null && args is Map) {
+        final lat = args["lat"];
+        final lng = args["lng"];
+        if (lat != null && lng != null) {
+          final position = LatLng(
+            (lat as num).toDouble(),
+            (lng as num).toDouble(),
+          );
+          _carteController.move(position, 14.0);
+          _calculerItineraire(position);
+        }
+      }
+    });
   }
 
   Future<void> _obtenirPosition() async {
@@ -133,7 +150,6 @@ class _CartePageState extends State<CartePage> {
     }
   }
 
-  // Calculer l'itinéraire avec OSRM
   Future<void> _calculerItineraire(LatLng destination) async {
     if (_positionUtilisateur == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -171,7 +187,6 @@ class _CartePageState extends State<CartePage> {
                 .toList();
           });
 
-          // Centrer entre les deux points
           final latMilieu =
               (_positionUtilisateur!.latitude + destination.latitude) / 2;
           final lngMilieu =
@@ -218,6 +233,84 @@ class _CartePageState extends State<CartePage> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // ✅ Mode visiteur
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green.shade800,
+          title: const Text("Carte",
+              style: TextStyle(color: Colors.white)),
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.grey.shade200,
+                  child: Icon(Icons.map_outlined,
+                      size: 50, color: Colors.grey.shade400),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Accès à la carte",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Connectez-vous pour explorer la carte des sites touristiques et tracer des itinéraires.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/connexion'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade800,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      "Se connecter",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/inscription'),
+                  child: const Text(
+                    "Créer un compte",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // ✅ Utilisateur connecté
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green.shade800,
@@ -265,7 +358,6 @@ class _CartePageState extends State<CartePage> {
       ),
       body: Stack(
         children: [
-          // Carte OpenStreetMap
           FlutterMap(
             mapController: _carteController,
             options: const MapOptions(
@@ -278,8 +370,6 @@ class _CartePageState extends State<CartePage> {
                     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 userAgentPackageName: "com.example.exploreci",
               ),
-
-              // Trait de l'itinéraire
               if (_itineraire.isNotEmpty)
                 PolylineLayer(
                   polylines: [
@@ -290,8 +380,6 @@ class _CartePageState extends State<CartePage> {
                     ),
                   ],
                 ),
-
-              // Marqueurs
               MarkerLayer(
                 markers: [
                   ..._sites.map((site) {
@@ -305,20 +393,14 @@ class _CartePageState extends State<CartePage> {
                           decoration: BoxDecoration(
                             color: site["couleur"],
                             shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Colors.white, width: 2),
+                            border: Border.all(color: Colors.white, width: 2),
                           ),
-                          child: const Icon(
-                            Icons.location_on,
-                            color: Colors.white,
-                            size: 22,
-                          ),
+                          child: const Icon(Icons.location_on,
+                              color: Colors.white, size: 22),
                         ),
                       ),
                     );
                   }),
-
-                  // Position utilisateur
                   if (_positionUtilisateur != null)
                     Marker(
                       point: _positionUtilisateur!,
@@ -330,11 +412,8 @@ class _CartePageState extends State<CartePage> {
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 3),
                         ),
-                        child: const Icon(
-                          Icons.person_pin,
-                          color: Colors.white,
-                          size: 25,
-                        ),
+                        child: const Icon(Icons.person_pin,
+                            color: Colors.white, size: 25),
                       ),
                     ),
                 ],
@@ -342,7 +421,6 @@ class _CartePageState extends State<CartePage> {
             ],
           ),
 
-          // Indicateur de chargement
           if (_chargementItineraire)
             Positioned(
               top: 16,
@@ -378,7 +456,6 @@ class _CartePageState extends State<CartePage> {
               ),
             ),
 
-          // Bouton effacer itinéraire
           if (_itineraire.isNotEmpty)
             Positioned(
               top: 16,
@@ -391,7 +468,6 @@ class _CartePageState extends State<CartePage> {
               ),
             ),
 
-          // Liste des sites en bas
           Positioned(
             bottom: 0,
             left: 0,
@@ -424,11 +500,8 @@ class _CartePageState extends State<CartePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.location_on,
-                            color: _sites[index]["couleur"],
-                            size: 18,
-                          ),
+                          Icon(Icons.location_on,
+                              color: _sites[index]["couleur"], size: 18),
                           const SizedBox(height: 4),
                           Text(
                             _sites[index]["nom"],
@@ -442,9 +515,7 @@ class _CartePageState extends State<CartePage> {
                           Text(
                             _sites[index]["ville"],
                             style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey.shade500,
-                            ),
+                                fontSize: 10, color: Colors.grey.shade500),
                           ),
                         ],
                       ),
@@ -455,7 +526,6 @@ class _CartePageState extends State<CartePage> {
             ),
           ),
 
-          // Bouton ma position
           Positioned(
             right: 16,
             bottom: 140,
@@ -463,10 +533,7 @@ class _CartePageState extends State<CartePage> {
               heroTag: "position",
               onPressed: _centrerSurMoi,
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.my_location,
-                color: Colors.green.shade800,
-              ),
+              child: Icon(Icons.my_location, color: Colors.green.shade800),
             ),
           ),
         ],
@@ -489,20 +556,16 @@ class _CartePageState extends State<CartePage> {
             Text(
               site["nom"],
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+                  fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Row(
               children: [
                 Icon(Icons.location_on,
                     size: 14, color: Colors.grey.shade500),
-                Text(
-                  site["ville"],
-                  style: TextStyle(
-                      color: Colors.grey.shade500, fontSize: 13),
-                ),
+                Text(site["ville"],
+                    style: TextStyle(
+                        color: Colors.grey.shade500, fontSize: 13)),
               ],
             ),
             const SizedBox(height: 16),
@@ -514,10 +577,8 @@ class _CartePageState extends State<CartePage> {
                   _calculerItineraire(site["position"]);
                 },
                 icon: const Icon(Icons.directions, color: Colors.white),
-                label: const Text(
-                  "Tracer l'itinéraire",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
+                label: const Text("Tracer l'itinéraire",
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green.shade800,
                   padding: const EdgeInsets.symmetric(vertical: 14),

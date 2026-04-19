@@ -27,38 +27,105 @@ class FavorisPage extends StatelessWidget {
           if (index == 3) Navigator.pushNamed(context, '/profil');
         },
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              color: Colors.green.shade800,
-              child: const Text(
-                "Mes Favoris ❤️",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+
+      // ✅ Mode visiteur — pas de header
+      body: user == null
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(Icons.favorite_border,
+                          size: 50, color: Colors.grey.shade400),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      "Accès aux favoris",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      "Connectez-vous pour enregistrer vos sites préférés et les retrouver facilement.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14, color: Colors.grey.shade600),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/connexion'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green.shade800,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          "Se connecter",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.pushNamed(context, '/inscription'),
+                      child: const Text(
+                        "Créer un compte",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: user == null
-                  ? const Center(
-                      child: Text("Connectez-vous pour voir vos favoris"),
-                    )
-                  : StreamBuilder<QuerySnapshot>(
+            )
+
+          // ✅ Utilisateur connecté — avec header
+          : SafeArea(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    color: Colors.green.shade800,
+                    child: const Text(
+                      "Mes Favoris ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('utilisateurs')
                           .doc(user.uid)
                           .collection('favoris')
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
-                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        if (!snapshot.hasData ||
+                            snapshot.data!.docs.isEmpty) {
                           return Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +146,8 @@ class FavorisPage extends StatelessWidget {
                                   "Explorez des sites et ajoutez-les\nà vos favoris !",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.grey.shade500),
+                                      fontSize: 14,
+                                      color: Colors.grey.shade500),
                                 ),
                                 const SizedBox(height: 24),
                                 ElevatedButton.icon(
@@ -92,7 +160,8 @@ class FavorisPage extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green.shade800,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                   ),
                                 ),
                               ],
@@ -104,8 +173,8 @@ class FavorisPage extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           itemCount: favoris.length,
                           itemBuilder: (context, index) {
-                            final data =
-                                favoris[index].data() as Map<String, dynamic>;
+                            final data = favoris[index].data()
+                                as Map<String, dynamic>;
                             final site = {
                               ...data,
                               "couleur": Color(data["couleur"]),
@@ -116,10 +185,10 @@ class FavorisPage extends StatelessWidget {
                         );
                       },
                     ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -155,7 +224,8 @@ class FavorisPage extends StatelessWidget {
         ),
       ),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, '/detail', arguments: site),
+        onTap: () =>
+            Navigator.pushNamed(context, '/detail', arguments: site),
         child: Card(
           margin: const EdgeInsets.only(bottom: 16),
           shape: RoundedRectangleBorder(
@@ -213,7 +283,8 @@ class FavorisPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Icon(Icons.favorite, color: Colors.red.shade400, size: 22),
+                    Icon(Icons.favorite,
+                        color: Colors.red.shade400, size: 22),
                   ],
                 ),
               ),

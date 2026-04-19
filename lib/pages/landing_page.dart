@@ -10,7 +10,7 @@ class LandingPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //  En-tête
+            // En-tête
             Container(
               width: double.infinity,
               height: 350,
@@ -18,11 +18,7 @@ class LandingPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.explore,
-                    size: 80,
-                    color: Colors.white,
-                  ),
+                  const Icon(Icons.explore, size: 80, color: Colors.white),
                   const SizedBox(height: 16),
                   const Text(
                     "ExploreCI",
@@ -36,10 +32,7 @@ class LandingPage extends StatelessWidget {
                   const Text(
                     "Découvrez les merveilles\nde la Côte d'Ivoire",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                 ],
               ),
@@ -50,10 +43,7 @@ class LandingPage extends StatelessWidget {
             // Fonctionnalités
             const Text(
               "Pourquoi ExploreCI ?",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -62,25 +52,24 @@ class LandingPage extends StatelessWidget {
                 "Trouvez les sites touristiques près de vous"),
             _buildFeature(Icons.photo_library, "Photos & Détails",
                 "Découvrez chaque site en images"),
-            _buildFeature(Icons.favorite, "Favoris",
-                "Sauvegardez vos sites préférés"),
+            _buildFeature(
+                Icons.favorite, "Favoris", "Sauvegardez vos sites préférés"),
             _buildFeature(Icons.offline_bolt, "Mode Hors Ligne",
                 "Consultez sans connexion internet"),
 
             const SizedBox(height: 30),
 
-            // 🟢 Boutons
+            // Boutons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  // Bouton S'inscrire
+                  // Bouton Créer un compte
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/inscription');
-                      },
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/inscription'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green.shade800,
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -90,10 +79,7 @@ class LandingPage extends StatelessWidget {
                       ),
                       child: const Text(
                         "Créer un compte",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
@@ -104,9 +90,8 @@ class LandingPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/connexion');
-                      },
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/connexion'),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: Colors.green.shade800),
@@ -123,6 +108,20 @@ class LandingPage extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 12),
+
+                  // ✅ Bouton mode visiteur
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, '/home'),
+                    child: Text(
+                      "Continuer sans compte →",
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -134,7 +133,6 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // Widget fonctionnalité
   Widget _buildFeature(IconData icone, String titre, String description) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
@@ -149,14 +147,11 @@ class LandingPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  titre,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  description,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-                ),
+                Text(titre,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(description,
+                    style: TextStyle(
+                        color: Colors.grey.shade600, fontSize: 13)),
               ],
             ),
           ),

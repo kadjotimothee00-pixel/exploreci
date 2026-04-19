@@ -28,7 +28,6 @@ class _ProfilPageState extends State<ProfilPage> {
             .collection('utilisateurs')
             .doc(user.uid)
             .get();
-
         if (doc.exists) {
           setState(() {
             _nom = doc['nom'] ?? "";
@@ -51,6 +50,92 @@ class _ProfilPageState extends State<ProfilPage> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // ✅ Mode visiteur
+    if (user == null) {
+      return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.green.shade800,
+          unselectedItemColor: Colors.grey,
+          currentIndex: 3,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+            BottomNavigationBarItem(icon: Icon(Icons.category), label: "Catégories"),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favoris"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          ],
+          onTap: (index) {
+            if (index == 0) Navigator.pushNamed(context, '/home');
+            if (index == 1) Navigator.pushNamed(context, '/categories');
+            if (index == 2) Navigator.pushNamed(context, '/favoris');
+          },
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.grey.shade200,
+                  child: Icon(Icons.person_outline,
+                      size: 50, color: Colors.grey.shade400),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Accès au profil",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Connectez-vous pour accéder à votre profil et gérer vos informations.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/connexion'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade800,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      "Se connecter",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/inscription'),
+                  child: const Text(
+                    "Créer un compte",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // ✅ Utilisateur connecté
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: BottomNavigationBar(
@@ -79,7 +164,6 @@ class _ProfilPageState extends State<ProfilPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // En-tête
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(30),
@@ -89,11 +173,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 60,
-                    color: Colors.green.shade800,
-                  ),
+                  child: Icon(Icons.person, size: 60, color: Colors.green.shade800),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -107,10 +187,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 const SizedBox(height: 4),
                 Text(
                   _email,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
             ),
@@ -132,25 +209,13 @@ class _ProfilPageState extends State<ProfilPage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                _buildOption(
-                  Icons.favorite,
-                  "Mes Favoris",
-                  () => Navigator.pushNamed(context, '/favoris'),
-                ),
-                _buildOption(
-                  Icons.settings,
-                  "Paramètres",
-                  () => Navigator.pushNamed(context, '/parametres'),
-                ),
-                _buildOption(
-                  Icons.map,
-                  "Carte des sites",
-                  () => Navigator.pushNamed(context, '/carte'),
-                ),
-
+                _buildOption(Icons.favorite, "Mes Favoris",
+                    () => Navigator.pushNamed(context, '/favoris')),
+                _buildOption(Icons.settings, "Paramètres",
+                    () => Navigator.pushNamed(context, '/parametres')),
+                _buildOption(Icons.map, "Carte des sites",
+                    () => Navigator.pushNamed(context, '/carte')),
                 const SizedBox(height: 20),
-
                 const Text(
                   "Autres",
                   style: TextStyle(
@@ -160,7 +225,6 @@ class _ProfilPageState extends State<ProfilPage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-
                 _buildOption(
                   Icons.logout,
                   "Se déconnecter",
@@ -170,7 +234,6 @@ class _ProfilPageState extends State<ProfilPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 30),
         ],
       ),
@@ -187,10 +250,8 @@ class _ProfilPageState extends State<ProfilPage> {
           backgroundColor: (couleur ?? Colors.green.shade800).withOpacity(0.1),
           child: Icon(icone, color: couleur ?? Colors.green.shade800),
         ),
-        title: Text(
-          titre,
-          style: TextStyle(color: couleur ?? Colors.black87),
-        ),
+        title: Text(titre,
+            style: TextStyle(color: couleur ?? Colors.black87)),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap: onTap,
       ),
@@ -214,10 +275,8 @@ class _ProfilPageState extends State<ProfilPage> {
               _deconnecter();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text(
-              "Déconnecter",
-              style: TextStyle(color: Colors.white),
-            ),
+            child: const Text("Déconnecter",
+                style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
