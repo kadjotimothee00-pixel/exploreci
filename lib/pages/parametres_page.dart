@@ -68,7 +68,7 @@ class _ParametresPageState extends State<ParametresPage> {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("🇫🇷  Français"),
+                    title: const Text(" Français"),
                     trailing: _langue == "Français"
                         ? Icon(Icons.check, color: Colors.green.shade800)
                         : null,
@@ -76,7 +76,7 @@ class _ParametresPageState extends State<ParametresPage> {
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text("🇬🇧  English"),
+                    title: const Text(" English"),
                     trailing: _langue == "English"
                         ? Icon(Icons.check, color: Colors.green.shade800)
                         : null,
