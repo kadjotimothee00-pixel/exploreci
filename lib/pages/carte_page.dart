@@ -24,7 +24,7 @@ class _CartePageState extends State<CartePage> {
     {
       "nom": "Basilique Notre-Dame de la Paix",
       "ville": "Yamoussoukro",
-      "position": const LatLng(6.8067, -5.2759),
+      "position": const LatLng(6.81166, -5.29656),
       "couleur": Colors.orange,
     },
     {

@@ -94,7 +94,6 @@ class FavorisPage extends StatelessWidget {
               ),
             )
 
-          // ✅ Utilisateur connecté — avec header
           : SafeArea(
               child: Column(
                 children: [
