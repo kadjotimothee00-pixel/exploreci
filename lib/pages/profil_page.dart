@@ -56,7 +56,7 @@ class _ProfilPageState extends State<ProfilPage> {
     if (user == null) {
       return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.green.shade800,
+          selectedItemColor:const Color.fromARGB(248, 20, 154, 45),
           unselectedItemColor: Colors.grey,
           currentIndex: 3,
           items: const [
@@ -105,7 +105,7 @@ class _ProfilPageState extends State<ProfilPage> {
                     onPressed: () =>
                         Navigator.pushNamed(context, '/connexion'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade800,
+                      backgroundColor: const Color.fromARGB(248, 20, 154, 45),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -139,7 +139,7 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.green.shade800,
+        selectedItemColor: const Color.fromARGB(255, 255, 174, 0),
         unselectedItemColor: Colors.grey,
         currentIndex: 3,
         items: const [

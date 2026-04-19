@@ -12,7 +12,7 @@ class FavorisPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.green.shade800,
+        selectedItemColor:const Color.fromARGB(248, 20, 154, 45),
         unselectedItemColor: Colors.grey,
         currentIndex: 2,
         items: const [
@@ -65,7 +65,7 @@ class FavorisPage extends StatelessWidget {
                         onPressed: () =>
                             Navigator.pushNamed(context, '/connexion'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade800,
+                          backgroundColor: const Color.fromARGB(248, 20, 154, 45),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),

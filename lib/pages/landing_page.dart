@@ -14,16 +14,20 @@ class LandingPage extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 350,
-              color: Colors.green.shade800,
+              color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.explore, size: 80, color: Colors.white),
-                  const SizedBox(height: 16),
+                 Image.asset(
+                  'assets/images/symbole.png',
+                  width: 200,
+                  height: 200,
+                    ),
+                    const SizedBox(height: 16),
                   const Text(
                     "ExploreCI",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 48, 158, 52),
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                     ),
@@ -32,7 +36,7 @@ class LandingPage extends StatelessWidget {
                   const Text(
                     "Découvrez les merveilles\nde la Côte d'Ivoire",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: Colors.green, fontSize: 16),
                   ),
                 ],
               ),
@@ -54,8 +58,6 @@ class LandingPage extends StatelessWidget {
                 "Découvrez chaque site en images"),
             _buildFeature(
                 Icons.favorite, "Favoris", "Sauvegardez vos sites préférés"),
-            _buildFeature(Icons.offline_bolt, "Mode Hors Ligne",
-                "Consultez sans connexion internet"),
 
             const SizedBox(height: 30),
 
@@ -111,7 +113,7 @@ class LandingPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // ✅ Bouton mode visiteur
+                  // Bouton mode visiteur
                   TextButton(
                     onPressed: () => Navigator.pushNamed(context, '/home'),
                     child: Text(
@@ -140,7 +142,7 @@ class LandingPage extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: Colors.green.shade100,
-            child: Icon(icone, color: Colors.green.shade800),
+            child: Icon(icone, color: const Color.fromARGB(255, 46, 125, 59)),
           ),
           const SizedBox(width: 16),
           Expanded(
