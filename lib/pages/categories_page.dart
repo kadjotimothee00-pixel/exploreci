@@ -231,7 +231,7 @@ class CategoriesPage extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
-              color: Colors.green.shade800,
+              color:  const Color.fromARGB(255, 252, 151, 0),
               child: const Text(
                 "Catégories",
                 style: TextStyle(

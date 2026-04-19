@@ -100,7 +100,7 @@ class FavorisPage extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
-                    color: Colors.green.shade800,
+                    color: const Color.fromARGB(255, 252, 151, 0),
                     child: const Text(
                       "Mes Favoris ",
                       style: TextStyle(
@@ -157,7 +157,7 @@ class FavorisPage extends StatelessWidget {
                                   label: const Text("Explorer les sites",
                                       style: TextStyle(color: Colors.white)),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green.shade800,
+                                    backgroundColor: const Color.fromARGB(255, 252, 151, 0),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),

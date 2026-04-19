@@ -139,7 +139,7 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color.fromARGB(255, 255, 174, 0),
+        selectedItemColor: const Color.fromARGB(248, 20, 154, 45),
         unselectedItemColor: Colors.grey,
         currentIndex: 3,
         items: const [
@@ -167,7 +167,7 @@ class _ProfilPageState extends State<ProfilPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(30),
-            color: Colors.green.shade800,
+            color: const Color.fromARGB(255, 252, 151, 0),
             child: Column(
               children: [
                 CircleAvatar(
@@ -179,7 +179,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 Text(
                   _nom.isEmpty ? "Utilisateur" : _nom,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 255, 255, 255),
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -187,7 +187,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 const SizedBox(height: 4),
                 Text(
                   _email,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: const TextStyle(color: Color.fromARGB(179, 246, 242, 242), fontSize: 14),
                 ),
               ],
             ),
@@ -209,7 +209,7 @@ class _ProfilPageState extends State<ProfilPage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _buildOption(Icons.favorite, "Mes Favoris",
+                _buildOption(Icons.favorite,"Mes Favoris",
                     () => Navigator.pushNamed(context, '/favoris')),
                 _buildOption(Icons.settings, "Paramètres",
                     () => Navigator.pushNamed(context, '/parametres')),
