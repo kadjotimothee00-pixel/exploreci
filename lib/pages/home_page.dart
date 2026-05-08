@@ -69,8 +69,8 @@ class _HomePageState extends State<HomePage> {
       "image": "https://res.cloudinary.com/yafohi-travel/image/upload/f_auto/images/districts-places/mosq-bf72epfq27.jpg",
     },
     {
-      "nom": "Pont de Lianes de Man",
-      "ville": "Man",
+      "nom": "Pont de Lianes de Lieupleu",
+      "ville": "Danané",
       "categorie": "Nature",
       "note": 4.5,
       "couleur": Colors.green,
@@ -107,14 +107,6 @@ class _HomePageState extends State<HomePage> {
       "note": 4.0,
       "couleur": Colors.teal,
       "image": "https://www.mangalis.com/wp-content/uploads/sites/166/2024/11/DJI_0531.jpg",
-    },
-    {
-      "nom": "Maison de Samory Touré",
-      "ville": "Bondoukou",
-      "categorie": "Culture",
-      "note": 4.3,
-      "couleur": Colors.purple,
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1N-4LA7jz9fntbO6aMEM8myxi4xzuCjEkdw&s",
     },
     {
       "nom": "Grande Mosquée de Kong",

@@ -54,7 +54,7 @@ class _DetailPageState extends State<DetailPage> {
       "https://res.cloudinary.com/yafohi-travel/image/upload/f_auto/images/districts-places/mosquee2-hisxdog269c.jpg",
 
     ],
-       "Pont de Lianes de Man": [
+       "Pont de Lianes de Lieupleu": [
       "https://openmoise.ci/web/image/product.image/15673/image_1024/Man%28Pont%20de%20liane%29?unique=86dc2e2",
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLmto3hdFGhv153jX-LJ4iJjeYTiZAgaqiIg&s",
       "https://upload.wikimedia.org/wikipedia/commons/d/d0/Pont-de-liane-poubara-gabon.jpg",
@@ -153,13 +153,7 @@ class _DetailPageState extends State<DetailPage> {
       await ref.delete();
       if (!mounted) return;
       setState(() => _estFavori = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Retiré des favoris"),
-          backgroundColor: Colors.grey,
-          duration: Duration(seconds: 1),
-        ),
-      );
+
     } else {
       await ref.set({
         "nom": _site!["nom"],
@@ -171,13 +165,7 @@ class _DetailPageState extends State<DetailPage> {
       });
       if (!mounted) return;
       setState(() => _estFavori = true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Ajouté aux favoris ❤️"),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1),
-        ),
-      );
+    
     }
   }
 
@@ -502,8 +490,8 @@ class _DetailPageState extends State<DetailPage> {
           "Le Zoo d'Abidjan est l'un des espaces verts les plus emblématiques de la capitale économique de Côte d'Ivoire. Situé au cœur du Banco, il abrite une grande variété d'animaux africains et constitue un lieu de détente et de découverte pour les familles.",
       "Mosquée Salam du Plateau":
           "La Mosquée Salam du Plateau est l'un des lieux de culte musulman les plus emblématiques d'Abidjan, située au cœur du quartier des affaires du Plateau. Avec son architecture majestueuse et ses minarets imposants, elle constitue un symbole religieux et culturel important pour la communauté musulmane de Côte d'Ivoire.",    
-      "Pont de Lianes de Man":
-          "Le Pont de Lianes de Man est l'un des sites naturels les plus fascinants de Côte d'Ivoire, situé dans la région des montagnes à Man, à l'ouest du pays. Suspendu au-dessus d'une rivière et entièrement construit de lianes tressées par les populations Dan, il constitue un symbole fort du patrimoine culturel et naturel ivoirien, attirant chaque année de nombreux touristes et aventuriers.",  
+      "Pont de Lianes de Lieupleu":
+          "Le Pont de Lianes de Lieupleu est l'un des sites naturels les plus fascinants de Côte d'Ivoire, situé  à Danané plus precisement à Lieupleu, à l'ouest du pays. Suspendu au-dessus d'une rivière et entièrement construit de lianes tressées par les populations Dan, il constitue un symbole fort du patrimoine culturel et naturel ivoirien, attirant chaque année de nombreux touristes et aventuriers.",  
       "Plage de San Pedro":
           "La Plage de San Pedro est l'une des plus belles plages de Côte d'Ivoire, située dans la ville portuaire de San Pedro, au sud-ouest du pays. Bordée de cocotiers et baignée par les eaux de l'Atlantique, elle offre un cadre naturel exceptionnel et constitue un lieu de détente et de villégiature prisé aussi bien par les habitants que par les touristes en quête de soleil et de mer.",
       "Musée National du Costume":
@@ -512,8 +500,6 @@ class _DetailPageState extends State<DetailPage> {
           "Le Palais de la Culture Bernard Binlin-Dadié est le principal temple de la culture d'Abidjan, situé à Treichville sur le front lagunaire, entre les deux ponts Houphouët-Boigny et Général de Gaulle. Fruit d'une coopération ivoiro-chinoise, cet imposant complexe de 12 900 m² a été construit entre 1996 et 1999. Son architecture distinctive, inspirée du siège royal akan, abrite plusieurs salles de spectacle, un théâtre à ciel ouvert de 2 500 places et de nombreux espaces culturels, accueillant concerts, pièces de théâtre, festivals et grandes manifestations artistiques qui font rayonner la créativité ivoirienne.",            
       "Stade de la Paix de Bouaké":
     "Le Stade de la Paix de Bouaké est l'une des plus grandes et des plus emblématiques infrastructures sportives de Côte d'Ivoire, situé en plein centre-ville de Bouaké, deuxième ville du pays. Inauguré en 1984 pour accueillir la Coupe d'Afrique des Nations organisée pour la première fois en terre ivoirienne, ce joyau architectural de forme ovale dispose aujourd'hui de 40 000 places assises après une profonde rénovation achevée en 2023. Son nom « Stade de la Paix » lui a été attribué en mémoire de la cérémonie historique de réconciliation nationale de 2007, où les armes de la crise ivoirienne furent symboliquement brûlées en ses enceintes.",
-      "Maison de Samory Touré": 
-    "La Maison de Samory Touré est un site historique majeur situé à Bondoukou, dans la région du Gontougo, à l'est de la Côte d'Ivoire. Elle fut la résidence de Samory Touré, célèbre résistant mandingue qui s'opposa farouchement à la colonisation française à la fin du XIXe siècle, faisant de lui l'une des figures les plus emblématiques de la résistance africaine. Classée patrimoine historique national, cette demeure témoigne du passage de l'almamy dans la région lors de ses campagnes militaires. Aujourd'hui lieu de mémoire et de fierté culturelle, elle attire historiens, chercheurs et touristes désireux de retracer l'épopée de ce héros panafricain.",
      "Grande Mosquée de Kong": 
     "La mosquée de Kong ou Grande mosquée de Kong est un édifice religieux islamique situé dans la ville de Kong au nord de la Côte d'Ivoire. En 1741 il a été noté que la ville de Kong possédait déjà plusieurs mosquées dont la Grande mosquée (Missiriba) détruite par Samory Touré vers 1897 et rebâtie à l'aube du XXe siècle",
     };

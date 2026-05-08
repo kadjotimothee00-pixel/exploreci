@@ -36,19 +36,19 @@ class _CartePageState extends State<CartePage> {
     {
       "nom": "Plage de Grand-Bassam",
       "ville": "Grand-Bassam",
-      "position": const LatLng(5.1993, -3.7362),
+      "position": const LatLng(5.195430484552369, -3.7432888663563757),
       "couleur": Colors.blue,
     },
     {
       "nom": "Marché de Cocody",
       "ville": "Abidjan",
-      "position": const LatLng(5.3600, -3.9800),
+      "position": const LatLng(5.334942,-4.00219),
       "couleur": Colors.purple,
     },
     {
       "nom": "Cascade de Man",
       "ville": "Man",
-      "position": const LatLng(7.4000, -7.5500),
+      "position": const LatLng(7.412173,-7.585139),
       "couleur": Colors.teal,
     },
     {
@@ -60,25 +60,25 @@ class _CartePageState extends State<CartePage> {
     {
       "nom": "Mosquée Salam du Plateau",
       "ville": "Abidjan",
-      "position": const LatLng(5.31916, -4.01833),
+      "position": const LatLng(5.319313,-4.015637),
       "couleur": Colors.orange,
     },
     {
-      "nom": "Pont de Lianes de Man",
-      "ville": "Man",
-      "position": const LatLng(7.41228, -7.55385),
+      "nom": "Pont de Lianes de Lieupleu",
+      "ville": "Danané",
+      "position": const LatLng(7.096734,  -8.106643),
       "couleur": Colors.green,
     },
     {
       "nom": "Plage de San Pedro",
       "ville": "San Pedro",
-      "position": const LatLng(4.74851, -6.63630),
+      "position": const LatLng(4.734442,  -6.623331),
       "couleur": Colors.blue,
     },
     {
       "nom": "Musée National du Costume",
       "ville": "Grand-Bassam",
-      "position": const LatLng(5.20172, -3.73907),
+      "position": const LatLng( 5.196055,  -3.736908),
       "couleur": Colors.purple,
     },
     {
@@ -94,15 +94,9 @@ class _CartePageState extends State<CartePage> {
       "couleur": Colors.green,
     },
     {
-      "nom": "Maison de Samory Touré",
-      "ville": "Bondoukou",
-      "position": const LatLng(8.040138, -2.800338),
-      "couleur": Colors.purple,
-    },
-    {
       "nom": "Grande Mosquée de Kong",
       "ville": "Kong",
-      "position": const LatLng(9.1491871, -4.6094382),
+      "position": const LatLng(9.149156, -4.609575),
       "couleur": Colors.orange,
     },
   ];
